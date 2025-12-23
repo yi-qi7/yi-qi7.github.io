@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merry Christmas!</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --tree-green: #0f5132;
+            --tree-light-green: #198754;
+            --star-gold: #ffc107;
+            --cat-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #1e293b 0%, #000000 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            perspective: 1200px;
+            /* 添加光标提示 */
+            cursor: pointer;
+        }
+
+        /* 添加加载提示 */
+        .audio-prompt {
+            position: absolute;
+            top: 20%;
+            color: #fff;
+            font-size: 1.2rem;
+            text-align: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border-radius: 10px;
+            animation: fadeInOut 3s infinite alternate;
+            display: none; /* 默认隐藏，在需要时显示 */
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* 其他样式保持不变 */
+        .title {
+            position: absolute;
+            top: 10%;
+            color: #fff;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            animation: glow 2s ease-in-out infinite alternate;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #ff0040; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #ff0040; }
+        }
+
+        .scene {
+            position: relative;
+            width: 300px;
+            height: 500px;
+            transform-style: preserve-3d;
+            transform: rotateX(-10deg); 
+        }
+
+        .tree-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .layer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transform-style: preserve-3d;
+        }
+
+        .cone-face {
+            position: absolute;
+            bottom: 10px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-color: transparent transparent var(--tree-green) transparent;
+            transform-origin: 50% 100%;
+        }
+        
+        .cone-face:nth-child(even) {
+            border-bottom-color: var(--tree-light-green);
+        }
+
+        .ornament {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: red;
+            box-shadow: 0 0 5px #fff;
+            left: -7px;
+            animation: blink 1.5s infinite alternate;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #fff; }
+        }
+
+        .star {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--star-gold);
+            font-size: 50px;
+            filter: drop-shadow(0 0 10px var(--star-gold));
+            animation: spin-star 2s linear infinite reverse; 
+        }
+        
+        @keyframes spin-star {
+            0% { transform: translateX(-50%) rotateY(0deg); }
+            100% { transform: translateX(-50%) rotateY(-360deg); }
+        }
+
+        .cat-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(80px) translateZ(180px);
+            width: 60px;
+            height: 80px;
+            z-index: 20;
+        }
+
+        .cat-body {
+            position: absolute;
+            bottom: 0;
+            width: 50px;
+            height: 40px;
+            background: var(--cat-color);
+            border-radius: 40px 40px 0 0;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        .cat-head {
+            position: absolute;
+            bottom: 30px;
+            left: 5px;
+            width: 40px;
+            height: 35px;
+            background: var(--cat-color);
+            border-radius: 50%;
+        }
+
+        .cat-ear {
+            position: absolute;
+            top: -10px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 15px solid var(--cat-color);
+        }
+        .cat-ear.left { left: 0; transform: rotate(-15deg); }
+        .cat-ear.right { right: 0; transform: rotate(15deg); }
+
+        .cat-eye {
+            position: absolute;
+            top: 12px;
+            width: 4px;
+            height: 4px;
+            background: #000;
+            border-radius: 50%;
+            animation: blink-eye 4s infinite;
+        }
+        .cat-eye.left { left: 10px; }
+        .cat-eye.right { right: 10px; }
+
+        @keyframes blink-eye {
+            0%, 96%, 100% { transform: scaleY(1); }
+            98% { transform: scaleY(0.1); }
+        }
+
+        .cat-tail {
+            position: absolute;
+            bottom: 0;
+            right: -10px;
+            width: 10px;
+            height: 30px;
+            border: 4px solid var(--cat-color);
+            border-radius: 50px;
+            border-left: 0;
+            border-top: 0;
+            transform-origin: bottom left;
+            animation: tail-wag 2s ease-in-out infinite;
+        }
+
+        @keyframes tail-wag {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        .snowflake {
+            position: absolute;
+            color: #fff;
+            font-size: 1em;
+            top: -20px;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh); }
+        }
+
+        .music-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .music-btn {
+            background: #ff4757;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background: #ff6b81;
+            transform: scale(1.1);
+        }
+
+        .volume-control {
+            width: 80px;
+        }
+
+        .music-info {
+            color: white;
+            font-size: 12px;
+            max-width: 120px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="title">Merry Christmas!</h1>
+    
+    <!-- 添加音频播放提示 -->
+    <div class="audio-prompt" id="audioPrompt">点击页面任意位置播放音乐</div>
+
+    <div class="scene">
+        <div class="tree-container">
+            <div class="star">★</div>
+            <div class="layer" style="top: 140px;">
+                <div class="cone-faces" id="layer1"></div>
+            </div>
+            <div class="layer" style="top: 270px;">
+                <div class="cone-faces" id="layer2"></div>
+            </div>
+            <div class="layer" style="top: 425px;">
+                <div class="cone-faces" id="layer3"></div>
+            </div>
+            <div style="position: absolute; top: 420px; left: 50%; transform: translateX(-50%); width: 40px; height: 80px; background: #5d4037;"></div>
+        </div>
+
+        <div class="cat-container">
+            <div class="cat-tail"></div>
+            <div class="cat-body"></div>
+            <div class="cat-head">
+                <div class="cat-ear left"></div>
+                <div class="cat-ear right"></div>
+                <div class="cat-eye left"></div>
+                <div class="cat-eye right"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="music-controls">
+        <button class="music-btn" id="playPauseBtn">⏸️</button>
+        <input type="range" class="volume-control" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
+        <div class="music-info">圣诞快乐</div>
+    </div>
+
+    <!-- 修改音频源为本地文件 -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="music.mp3" type="audio/mpeg">
+        您的浏览器不支持音频元素。
+    </audio>
+
+    <script>
+        // 生成树的3D面
+        function createTreeLayer(layerId, faceWidth, height, faceCount) {
+            const container = document.getElementById(layerId);
+            const angleStep = 360 / faceCount;
+            
+            const radius = (faceWidth * 1.0) + 10;
+
+            for (let i = 0; i < faceCount; i++) {
+                const face = document.createElement('div');
+                face.className = 'cone-face';
+                
+                face.style.borderBottomWidth = `${height}px`;
+                face.style.borderLeftWidth = `${faceWidth / 2}px`;
+                face.style.borderRightWidth = `${faceWidth / 2}px`;
+                face.style.left = `-${faceWidth / 2}px`;
+                
+                face.style.transform = `rotateY(${i * angleStep}deg) translateZ(${radius}px) rotateX(15deg)`;
+
+                for (let j = 0; j < 2; j++) {
+                    const ornament = document.createElement('div');
+                    ornament.className = 'ornament';
+                    
+                    const colors = [
+                        '#ff0000', '#ffff00', '#0000ff', '#ff1493',
+                        '#00ff00', '#ffa500', '#800080', '#00ffff',
+                        '#ff69b4', '#8a2be2', '#32cd32', '#ff4500'
+                    ];
+                    ornament.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    const size = Math.floor(Math.random() * 10) + 6;
+                    ornament.style.width = `${size}px`;
+                    ornament.style.height = `${size}px`;
+                    
+                    if (j === 0) {
+                        ornament.style.top = (Math.random() * (height * 0.4) + 20) + 'px';
+                    } else {
+                        ornament.style.top = (Math.random() * (height * 0.4) + height * 0.4) + 'px';
+                    }
+                    
+                    const maxLeftOffset = faceWidth * 0.3;
+                    const leftOffset = (Math.random() * maxLeftOffset * 2) - maxLeftOffset;
+                    ornament.style.left = `${leftOffset}px`;
+                    
+                    ornament.style.animationDelay = (Math.random() * 2) + 's';
+                    ornament.style.filter = `drop-shadow(0 0 3px ${ornament.style.backgroundColor})`;
+                    
+                    face.appendChild(ornament);
+                }
+
+                container.appendChild(face);
+            }
+        }
+
+        // 创建树层
+        createTreeLayer('layer1', 110, 150, 4);
+        createTreeLayer('layer2', 80, 150, 8);
+        createTreeLayer('layer3', 110, 200, 12);
+
+        // 生成雪花
+        function createSnow() {
+            const snow = document.createElement('div');
+            snow.className = 'snowflake';
+            snow.innerHTML = '❄';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snow.style.opacity = Math.random();
+            snow.style.fontSize = Math.random() * 10 + 10 + 'px';
+            
+            document.body.appendChild(snow);
+
+            setTimeout(() => {
+                snow.remove();
+            }, 5000);
+        }
+
+        setInterval(createSnow, 100);
+
+        // 音乐控制功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('bgMusic');
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const volumeControl = document.getElementById('volumeControl');
+            const audioPrompt = document.getElementById('audioPrompt');
+            
+            // 设置初始音量
+            audio.volume = volumeControl.value;
+            
+            // 尝试自动播放音乐（解决浏览器限制）
+            function attemptAutoPlay() {
+                const playPromise = audio.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // 自动播放成功
+                        console.log('音乐自动播放成功');
+                        audioPrompt.style.display = 'none';
+                        playPauseBtn.textContent = '⏸️';
+                    }).catch(error => {
+                        // 自动播放被阻止，显示提示
+                        console.log('自动播放被阻止，需要用户交互');
+                        audioPrompt.style.display = 'block';
+                        playPauseBtn.textContent = '▶️';
+                    });
+                }
+            }
+            
+            // 页面加载后尝试自动播放
+            setTimeout(attemptAutoPlay, 1000);
+            
+            // 播放/暂停按钮事件
+            playPauseBtn.addEventListener('click', function(event) {
+                // 阻止事件冒泡，避免触发全局点击事件
+                event.stopPropagation();
+                
+                if (audio.paused) {
+                    audio.play();
+                    playPauseBtn.textContent = '⏸️';
+                    audioPrompt.style.display = 'none';
+                } else {
+                    audio.pause();
+                    playPauseBtn.textContent = '▶️';
+                }
+            });
+            
+            // 音量控制事件
+            volumeControl.addEventListener('input', function() {
+                audio.volume = volumeControl.value;
+            });
+            
+            // 全局点击事件 - 解决自动播放限制
+            document.body.addEventListener('click', function() {
+                if (audio.paused) {
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            playPauseBtn.textContent = '⏸️';
+                            audioPrompt.style.display = 'none';
+                        });
+                    }
+                }
+            });
+            
+            // 音频加载错误处理
+            audio.addEventListener('error', function() {
+                console.error('音频加载错误，请检查music.mp3文件是否存在');
+                audioPrompt.textContent = '音乐文件加载失败，请检查music.mp3';
+                audioPrompt.style.display = 'block';
+            });
+            
+            // 音频加载成功
+            audio.addEventListener('canplaythrough', function() {
+                console.log('音频已加载完成，可以播放');
+            });
+        });
+    </script>
+</body>
+</html>
