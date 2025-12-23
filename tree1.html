@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旋转圣诞树 | 带小猫🎄</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(120deg, #0c1445, #1a237e, #311b92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px; /* 3D透视效果 */
+        }
+        /* 圣诞树容器（实现旋转） */
+        .christmas-tree {
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateTree 20s linear infinite;
+        }
+        /* 圣诞树主体 */
+        .tree-top {
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 150px solid #2e7d32;
+            position: relative;
+        }
+        .tree-middle {
+            width: 0;
+            height: 0;
+            border-left: 130px solid transparent;
+            border-right: 130px solid transparent;
+            border-bottom: 180px solid #2e7d32;
+            position: absolute;
+            top: 80px;
+            left: -130px;
+        }
+        .tree-bottom {
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-bottom: 200px solid #2e7d32;
+            position: absolute;
+            top: 200px;
+            left: -160px;
+        }
+        /* 树干 */
+        .tree-trunk {
+            width: 40px;
+            height: 80px;
+            background: #8d6e63;
+            position: absolute;
+            top: 350px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 20px 20px 0 0;
+        }
+        /* 装饰球 */
+        .ornament {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            animation: blink 2s infinite alternate;
+        }
+        .ornament-1 { background: #e53935; top: 120px; left: -40px; }
+        .ornament-2 { background: #ffeb3b; top: 180px; left: 60px; }
+        .ornament-3 { background: #42a5f5; top: 250px; left: -80px; }
+        .ornament-4 { background: #ec407a; top: 300px; left: 90px; }
+        .ornament-5 { background: #66bb6a; top: 150px; left: 20px; }
+        /* 星星顶饰 */
+        .star {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: #ffd700;
+            clip-path: polygon(
+                50% 0%, 61% 35%, 98% 35%, 68% 57%, 
+                79% 91%, 50% 70%, 21% 91%, 32% 57%, 
+                2% 35%, 39% 35%
+            );
+            animation: spinStar 5s linear infinite;
+        }
+        /* 小猫样式 */
+        .cat {
+            position: absolute;
+            top: 380px;
+            left: 50%;
+            transform: translateX(-50%) translateZ(50px); /* 3D层级 */
+            width: 80px;
+            height: 60px;
+            animation: catMove 3s ease-in-out infinite alternate;
+        }
+        .cat-head {
+            width: 50px;
+            height: 40px;
+            background: #f5f5dc;
+            border-radius: 50%;
+            position: relative;
+        }
+        .cat-ear-left, .cat-ear-right {
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #f5f5dc;
+            position: absolute;
+            top: -15px;
+        }
+        .cat-ear-left { left: 0; transform: rotate(-30deg); }
+        .cat-ear-right { right: 0; transform: rotate(30deg); }
+        .cat-eye-left, .cat-eye-right {
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+        }
+        .cat-eye-left { left: 10px; }
+        .cat-eye-right { right: 10px; }
+        .cat-nose {
+            width: 8px;
+            height: 8px;
+            background: #ff9e80;
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .cat-body {
+            width: 60px;
+            height: 40px;
+            background: #f5f5dc;
+            border-radius: 50% 50% 30% 30%;
+            position: absolute;
+            top: 30px;
+            left: 10px;
+        }
+        .cat-tail {
+            width: 30px;
+            height: 10px;
+            background: #f5f5dc;
+            border-radius: 50%;
+            position: absolute;
+            top: 40px;
+            right: -20px;
+            transform: rotate(30deg);
+            animation: tailWag 2s ease-in-out infinite alternate;
+        }
+        /* 动画定义 */
+        @keyframes rotateTree {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        @keyframes spinStar {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
+        }
+        @keyframes blink {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.7; transform: scale(1.1); }
+        }
+        @keyframes catMove {
+            0% { transform: translateX(-50%) translateZ(50px) rotate(0deg); }
+            100% { transform: translateX(-50%) translateZ(50px) rotate(5deg); }
+        }
+        @keyframes tailWag {
+            0% { transform: rotate(30deg); }
+            100% { transform: rotate(60deg); }
+        }
+        /* 适配移动端 */
+        @media (max-width: 768px) {
+            .tree-top {
+                border-left: 70px solid transparent;
+                border-right: 70px solid transparent;
+                border-bottom: 100px solid #2e7d32;
+            }
+            .tree-middle {
+                border-left: 90px solid transparent;
+                border-right: 90px solid transparent;
+                border-bottom: 120px solid #2e7d32;
+                top: 60px;
+                left: -90px;
+            }
+            .tree-bottom {
+                border-left: 120px solid transparent;
+                border-right: 120px solid transparent;
+                border-bottom: 150px solid #2e7d32;
+                top: 150px;
+                left: -120px;
+            }
+            .tree-trunk {
+                width: 30px;
+                height: 60px;
+                top: 260px;
+            }
+            .cat {
+                top: 290px;
+                transform: translateX(-50%) scale(0.8) translateZ(50px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="christmas-tree">
+        <!-- 星星顶饰 -->
+        <div class="star"></div>
+        
+        <!-- 圣诞树主体 -->
+        <div class="tree-top"></div>
+        <div class="tree-middle"></div>
+        <div class="tree-bottom"></div>
+        
+        <!-- 装饰球 -->
+        <div class="ornament ornament-1"></div>
+        <div class="ornament ornament-2"></div>
+        <div class="ornament ornament-3"></div>
+        <div class="ornament ornament-4"></div>
+        <div class="ornament ornament-5"></div>
+        
+        <!-- 树干 -->
+        <div class="tree-trunk"></div>
+        
+        <!-- 小猫 -->
+        <div class="cat">
+            <div class="cat-head">
+                <div class="cat-ear-left"></div>
+                <div class="cat-ear-right"></div>
+                <div class="cat-eye-left"></div>
+                <div class="cat-eye-right"></div>
+                <div class="cat-nose"></div>
+            </div>
+            <div class="cat-body"></div>
+            <div class="cat-tail"></div>
+        </div>
+    </div>
+
+    <script>
+        // 可选：动态添加更多装饰球（增强效果）
+        const tree = document.querySelector('.christmas-tree');
+        const ornamentCount = 8; // 额外添加8个装饰球
+        const colors = ['#e53935', '#ffeb3b', '#42a5f5', '#ec407a', '#66bb6a', '#ba68c8'];
+        
+        for (let i = 0; i < ornamentCount; i++) {
+            const ornament = document.createElement('div');
+            ornament.classList.add('ornament');
+            ornament.style.background = colors[Math.floor(Math.random() * colors.length)];
+            // 随机位置
+            const posX = Math.random() * 200 - 100; // -100 ~ 100
+            const posY = Math.random() * 250 + 80;  // 80 ~ 330
+            ornament.style.top = `${posY}px`;
+            ornament.style.left = `${posX}px`;
+            // 随机动画时长
+            ornament.style.animation = `blink ${1 + Math.random() * 2}s infinite alternate`;
+            tree.appendChild(ornament);
+        }
+    </script>
+</body>
+</html>
