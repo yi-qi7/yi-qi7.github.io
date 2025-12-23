@@ -3,272 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>旋转圣诞树 | 带小猫🎄</title>
+    <title>Merry Christmas</title>
     <style>
-        * {
+        :root {
+            --bg-color: #0f172a;
+            --tree-green: #0f5132;
+            --tree-light-green: #198754;
+            --star-gold: #ffc107;
+            --cat-color: #ffffff;
+        }
+
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            min-height: 100vh;
-            background: linear-gradient(120deg, #0c1445, #1a237e, #311b92);
+            background: radial-gradient(circle at center, #1e293b 0%, #000000 100%);
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            perspective: 1000px; /* 3D透视效果 */
+            font-family: 'Arial', sans-serif;
+            perspective: 1200px; /* 稍微增加透视距离，减少畸变 */
         }
-        /* 圣诞树容器（实现旋转） */
-        .christmas-tree {
+
+        /* 标题文字 */
+        .title {
+            position: absolute;
+            top: 10%;
+            color: #fff;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+            animation: glow 2s ease-in-out infinite alternate;
+            z-index: 10;
+            text-align: center;
+            width: 100%;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #ff0040; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #ff0040; }
+        }
+
+        /* 3D 场景容器 */
+        .scene {
             position: relative;
+            width: 300px;
+            height: 500px; /* 增加场景高度，给树更多空间 */
             transform-style: preserve-3d;
-            animation: rotateTree 20s linear infinite;
+            transform: rotateX(-10deg); 
         }
-        /* 圣诞树主体 */
-        .tree-top {
-            width: 0;
-            height: 0;
-            border-left: 100px solid transparent;
-            border-right: 100px solid transparent;
-            border-bottom: 150px solid #2e7d32;
-            position: relative;
-        }
-        .tree-middle {
-            width: 0;
-            height: 0;
-            border-left: 130px solid transparent;
-            border-right: 130px solid transparent;
-            border-bottom: 180px solid #2e7d32;
+
+        /* 旋转的树容器 */
+        .tree-container {
             position: absolute;
-            top: 80px;
-            left: -130px;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: spin 10s linear infinite;
         }
-        .tree-bottom {
-            width: 0;
-            height: 0;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            border-bottom: 200px solid #2e7d32;
-            position: absolute;
-            top: 200px;
-            left: -160px;
-        }
-        /* 树干 */
-        .tree-trunk {
-            width: 40px;
-            height: 80px;
-            background: #8d6e63;
-            position: absolute;
-            top: 350px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 20px 20px 0 0;
-        }
-        /* 装饰球 */
-        .ornament {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            animation: blink 2s infinite alternate;
-        }
-        .ornament-1 { background: #e53935; top: 120px; left: -40px; }
-        .ornament-2 { background: #ffeb3b; top: 180px; left: 60px; }
-        .ornament-3 { background: #42a5f5; top: 250px; left: -80px; }
-        .ornament-4 { background: #ec407a; top: 300px; left: 90px; }
-        .ornament-5 { background: #66bb6a; top: 150px; left: 20px; }
-        /* 星星顶饰 */
-        .star {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 50px;
-            background: #ffd700;
-            clip-path: polygon(
-                50% 0%, 61% 35%, 98% 35%, 68% 57%, 
-                79% 91%, 50% 70%, 21% 91%, 32% 57%, 
-                2% 35%, 39% 35%
-            );
-            animation: spinStar 5s linear infinite;
-        }
-        /* 小猫样式 */
-        .cat {
-            position: absolute;
-            top: 380px;
-            left: 50%;
-            transform: translateX(-50%) translateZ(50px); /* 3D层级 */
-            width: 80px;
-            height: 60px;
-            animation: catMove 3s ease-in-out infinite alternate;
-        }
-        .cat-head {
-            width: 50px;
-            height: 40px;
-            background: #f5f5dc;
-            border-radius: 50%;
-            position: relative;
-        }
-        .cat-ear-left, .cat-ear-right {
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 25px solid #f5f5dc;
-            position: absolute;
-            top: -15px;
-        }
-        .cat-ear-left { left: 0; transform: rotate(-30deg); }
-        .cat-ear-right { right: 0; transform: rotate(30deg); }
-        .cat-eye-left, .cat-eye-right {
-            width: 8px;
-            height: 8px;
-            background: #000;
-            border-radius: 50%;
-            position: absolute;
-            top: 10px;
-        }
-        .cat-eye-left { left: 10px; }
-        .cat-eye-right { right: 10px; }
-        .cat-nose {
-            width: 8px;
-            height: 8px;
-            background: #ff9e80;
-            border-radius: 50%;
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .cat-body {
-            width: 60px;
-            height: 40px;
-            background: #f5f5dc;
-            border-radius: 50% 50% 30% 30%;
-            position: absolute;
-            top: 30px;
-            left: 10px;
-        }
-        .cat-tail {
-            width: 30px;
-            height: 10px;
-            background: #f5f5dc;
-            border-radius: 50%;
-            position: absolute;
-            top: 40px;
-            right: -20px;
-            transform: rotate(30deg);
-            animation: tailWag 2s ease-in-out infinite alternate;
-        }
-        /* 动画定义 */
-        @keyframes rotateTree {
+
+        @keyframes spin {
             0% { transform: rotateY(0deg); }
             100% { transform: rotateY(360deg); }
         }
-        @keyframes spinStar {
-            0% { transform: translateX(-50%) rotate(0deg); }
-            100% { transform: translateX(-50%) rotate(360deg); }
+
+        /* 树的层级构建 */
+        .layer {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transform-style: preserve-3d;
         }
+
+        /* 每一层由多个三角形面组成 */
+        .cone-face {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-color: transparent transparent var(--tree-green) transparent;
+            transform-origin: 50% 100%;
+        }
+        
+        /* 给面加一点渐变效果 */
+        .cone-face:nth-child(even) {
+            border-bottom-color: var(--tree-light-green);
+        }
+
+        /* 树的装饰球 */
+        .ornament {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: red;
+            box-shadow: 0 0 5px #fff;
+            left: -7px;
+            animation: blink 1.5s infinite alternate;
+        }
+
         @keyframes blink {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.7; transform: scale(1.1); }
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px #fff; }
         }
-        @keyframes catMove {
-            0% { transform: translateX(-50%) translateZ(50px) rotate(0deg); }
-            100% { transform: translateX(-50%) translateZ(50px) rotate(5deg); }
+
+        /* 树顶星星 */
+        .star {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--star-gold);
+            font-size: 50px;
+            filter: drop-shadow(0 0 10px var(--star-gold));
+            animation: spin-star 2s linear infinite reverse; 
         }
-        @keyframes tailWag {
-            0% { transform: rotate(30deg); }
-            100% { transform: rotate(60deg); }
+        
+        @keyframes spin-star {
+            0% { transform: translateX(-50%) rotateY(0deg); }
+            100% { transform: translateX(-50%) rotateY(-360deg); }
         }
-        /* 适配移动端 */
-        @media (max-width: 768px) {
-            .tree-top {
-                border-left: 70px solid transparent;
-                border-right: 70px solid transparent;
-                border-bottom: 100px solid #2e7d32;
-            }
-            .tree-middle {
-                border-left: 90px solid transparent;
-                border-right: 90px solid transparent;
-                border-bottom: 120px solid #2e7d32;
-                top: 60px;
-                left: -90px;
-            }
-            .tree-bottom {
-                border-left: 120px solid transparent;
-                border-right: 120px solid transparent;
-                border-bottom: 150px solid #2e7d32;
-                top: 150px;
-                left: -120px;
-            }
-            .tree-trunk {
-                width: 30px;
-                height: 60px;
-                top: 260px;
-            }
-            .cat {
-                top: 290px;
-                transform: translateX(-50%) scale(0.8) translateZ(50px);
-            }
+
+        /* === 小猫部分 === */
+        .cat-container {
+            position: absolute;
+            bottom: 20px; /* 稍微调高一点，避免被屏幕切掉 */
+            left: 50%;
+            /* translateZ 让猫离树有一段距离，看起来在树前 */
+            transform: translateX(80px) translateZ(180px); 
+            width: 60px;
+            height: 80px;
+            z-index: 20; 
         }
+
+        .cat-body {
+            position: absolute;
+            bottom: 0;
+            width: 50px;
+            height: 40px;
+            background: var(--cat-color);
+            border-radius: 40px 40px 0 0;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+
+        .cat-head {
+            position: absolute;
+            bottom: 30px;
+            left: 5px;
+            width: 40px;
+            height: 35px;
+            background: var(--cat-color);
+            border-radius: 50%;
+        }
+
+        .cat-ear {
+            position: absolute;
+            top: -10px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 15px solid var(--cat-color);
+        }
+        .cat-ear.left { left: 0; transform: rotate(-15deg); }
+        .cat-ear.right { right: 0; transform: rotate(15deg); }
+
+        .cat-eye {
+            position: absolute;
+            top: 12px;
+            width: 4px;
+            height: 4px;
+            background: #000;
+            border-radius: 50%;
+            animation: blink-eye 4s infinite;
+        }
+        .cat-eye.left { left: 10px; }
+        .cat-eye.right { right: 10px; }
+
+        @keyframes blink-eye {
+            0%, 96%, 100% { transform: scaleY(1); }
+            98% { transform: scaleY(0.1); }
+        }
+
+        .cat-tail {
+            position: absolute;
+            bottom: 0;
+            right: -10px;
+            width: 10px;
+            height: 30px;
+            border: 4px solid var(--cat-color);
+            border-radius: 50px;
+            border-left: 0;
+            border-top: 0;
+            transform-origin: bottom left;
+            animation: tail-wag 2s ease-in-out infinite;
+        }
+
+        @keyframes tail-wag {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        /* 雪花 */
+        .snowflake {
+            position: absolute;
+            color: #fff;
+            font-size: 1em;
+            top: -20px;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh); }
+        }
+
     </style>
 </head>
 <body>
-    <div class="christmas-tree">
-        <!-- 星星顶饰 -->
-        <div class="star"></div>
-        
-        <!-- 圣诞树主体 -->
-        <div class="tree-top"></div>
-        <div class="tree-middle"></div>
-        <div class="tree-bottom"></div>
-        
-        <!-- 装饰球 -->
-        <div class="ornament ornament-1"></div>
-        <div class="ornament ornament-2"></div>
-        <div class="ornament ornament-3"></div>
-        <div class="ornament ornament-4"></div>
-        <div class="ornament ornament-5"></div>
-        
-        <!-- 树干 -->
-        <div class="tree-trunk"></div>
-        
-        <!-- 小猫 -->
-        <div class="cat">
-            <div class="cat-head">
-                <div class="cat-ear-left"></div>
-                <div class="cat-ear-right"></div>
-                <div class="cat-eye-left"></div>
-                <div class="cat-eye-right"></div>
-                <div class="cat-nose"></div>
+
+    <h1 class="title">Merry Christmas!</h1>
+
+    <div class="scene">
+        <!-- 旋转的树 -->
+        <div class="tree-container">
+            
+            <!-- 星星 -->
+            <div class="star">★</div>
+
+            <!-- 
+               修正说明：
+               调整了 style="top: ..." 的值，拉开层级距离。
+               Layer 1: Top 0px
+               Layer 2: Top 70px (之前太挤了)
+               Layer 3: Top 160px (拉开到底部)
+            -->
+
+            <!-- 树冠层 1 (顶部 - 小而尖) -->
+            <div class="layer" style="top: 0px;">
+                <div class="cone-faces" id="layer1"></div>
             </div>
-            <div class="cat-body"></div>
+
+            <!-- 树冠层 2 (中部 - 中等大小) -->
+            <div class="layer" style="top: 70px;">
+                <div class="cone-faces" id="layer2"></div>
+            </div>
+
+            <!-- 树冠层 3 (底部 - 巨大宽阔) -->
+            <div class="layer" style="top: 160px;">
+                <div class="cone-faces" id="layer3"></div>
+            </div>
+            
+            <!-- 树干 - 向下移动并加粗 -->
+            <div style="position: absolute; top: 320px; left: 50%; transform: translateX(-50%); width: 40px; height: 80px; background: #5d4037;"></div>
+
+        </div>
+
+        <!-- 小猫 -->
+        <div class="cat-container">
             <div class="cat-tail"></div>
+            <div class="cat-body"></div>
+            <div class="cat-head">
+                <div class="cat-ear left"></div>
+                <div class="cat-ear right"></div>
+                <div class="cat-eye left"></div>
+                <div class="cat-eye right"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // 可选：动态添加更多装饰球（增强效果）
-        const tree = document.querySelector('.christmas-tree');
-        const ornamentCount = 8; // 额外添加8个装饰球
-        const colors = ['#e53935', '#ffeb3b', '#42a5f5', '#ec407a', '#66bb6a', '#ba68c8'];
-        
-        for (let i = 0; i < ornamentCount; i++) {
-            const ornament = document.createElement('div');
-            ornament.classList.add('ornament');
-            ornament.style.background = colors[Math.floor(Math.random() * colors.length)];
-            // 随机位置
-            const posX = Math.random() * 200 - 100; // -100 ~ 100
-            const posY = Math.random() * 250 + 80;  // 80 ~ 330
-            ornament.style.top = `${posY}px`;
-            ornament.style.left = `${posX}px`;
-            // 随机动画时长
-            ornament.style.animation = `blink ${1 + Math.random() * 2}s infinite alternate`;
-            tree.appendChild(ornament);
+        // 生成树的3D面
+        function createTreeLayer(layerId, faceWidth, height, faceCount) {
+            const container = document.getElementById(layerId);
+            const angleStep = 360 / faceCount;
+            
+            // 计算半径，让面能围成一个圆环
+            // 半径系数调整为 1.2，让树看起来更胖一点，不那么单薄
+            const radius = (faceWidth * 1.5) + 10; 
+
+            for (let i = 0; i < faceCount; i++) {
+                const face = document.createElement('div');
+                face.className = 'cone-face';
+                
+                // 设置三角形的大小
+                face.style.borderBottomWidth = `${height}px`;
+                face.style.borderLeftWidth = `${faceWidth / 2}px`;
+                face.style.borderRightWidth = `${faceWidth / 2}px`;
+                // 修正定位
+                face.style.left = `-${faceWidth / 2}px`;
+                
+                // 3D 旋转排列
+                // 增加了 rotateX(15deg) 让叶子稍微向外张开，更像真实的树
+                face.style.transform = `rotateY(${i * angleStep}deg) translateZ(${radius}px) rotateX(15deg)`;
+
+                // 随机添加装饰球
+                if (Math.random() > 0.4) {
+                    const ornament = document.createElement('div');
+                    ornament.className = 'ornament';
+                    ornament.style.backgroundColor = ['#ff0000', '#ffff00', '#00f', '#ff1493'][Math.floor(Math.random() * 4)];
+                    // 随机球的位置，不让它都在同一条线上
+                    ornament.style.top = (Math.random() * (height * 0.6) + 20) + 'px'; 
+                    face.appendChild(ornament);
+                }
+
+                container.appendChild(face);
+            }
         }
+
+        /* 
+           === 关键修正部分 ===
+           这里显著拉开了每一层的尺寸差异，形成了明显的金字塔形状。
+           参数说明: createTreeLayer(ID, 单个面的宽度, 高度, 面的数量)
+        */
+
+        // 第1层：顶部，很窄，高度适中
+        createTreeLayer('layer1', 40, 90, 8);
+
+        // 第2层：中部，变宽，变高
+        createTreeLayer('layer2', 70, 140, 10);
+
+        // 第3层：底部，非常宽，很高
+        createTreeLayer('layer3', 100, 200, 12);
+
+        // 生成雪花
+        function createSnow() {
+            const snow = document.createElement('div');
+            snow.className = 'snowflake';
+            snow.innerHTML = '❄';
+            snow.style.left = Math.random() * 100 + 'vw';
+            snow.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snow.style.opacity = Math.random();
+            snow.style.fontSize = Math.random() * 10 + 10 + 'px';
+            
+            document.body.appendChild(snow);
+
+            setTimeout(() => {
+                snow.remove();
+            }, 5000);
+        }
+
+        setInterval(createSnow, 100);
     </script>
 </body>
 </html>
