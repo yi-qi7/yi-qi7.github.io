@@ -310,4 +310,17 @@
         // setInterval(changeBackground, 30000);
         
         // 添加一些动态效果：当鼠标悬停在时间单元上时，数字轻微跳动
-        const timeNumbers = document.querySelectorAll('.time
+        const timeNumbers = document.querySelectorAll('.time-number');
+        timeNumbers.forEach(number => {
+            number.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.transition = 'transform 0.2s';
+            });
+            
+            number.addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
