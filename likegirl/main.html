@@ -141,15 +141,7 @@
             letter-spacing: 1px;
         }
         
-        .start-date {
-            font-size: 1.3rem;
-            color: #e63946;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #ffe5e9;
-            border-radius: 10px;
-            display: inline-block;
-        }
+        /* 已经删除了 .start-date 样式 */
         
         .love-quote {
             font-style: italic;
@@ -255,8 +247,7 @@
                 </div>
             </div>
             
-            <!-- 重新添加开始日期显示 -->
-            <div class="start-date" id="startDateText"></div>
+            <!-- 已删除开始日期显示 -->
             
             <div class="love-quote">
                 "爱情不是彼此凝视，而是一起朝着同一个方向看。在一起的日子，是我们共同书写的最美篇章。"
@@ -273,22 +264,6 @@
     <script>
         // 设置开始日期和时间（2022年12月9日 11:59:59）
         const startDate = new Date('2022-12-09T11:59:59');
-        
-        // 格式化日期和时间，确保分钟和秒数是两位数
-        function formatDate(date) {
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            const seconds = date.getSeconds().toString().padStart(2, '0');
-            
-            return `${year}年${month}月${day}日 ${hours}:${minutes}:${seconds}`;
-        }
-        
-        // 更新显示开始日期的文本
-        document.getElementById('startDateText').textContent = 
-            `开始日期：${formatDate(startDate)}`;
         
         // 更新时间显示的函数
         function updateTime() {
@@ -335,17 +310,4 @@
         // setInterval(changeBackground, 30000);
         
         // 添加一些动态效果：当鼠标悬停在时间单元上时，数字轻微跳动
-        const timeNumbers = document.querySelectorAll('.time-number');
-        timeNumbers.forEach(number => {
-            number.addEventListener('mouseover', function() {
-                this.style.transform = 'scale(1.1)';
-                this.style.transition = 'transform 0.2s';
-            });
-            
-            number.addEventListener('mouseout', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
-    </script>
-</body>
-</html>
+        const timeNumbers = document.querySelectorAll('.time
