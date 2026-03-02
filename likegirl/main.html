@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的时光记录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            background-color: #f9f7f7;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 上半部分背景图片区域 */
+        .hero-section {
+            height: 60vh;
+            background-image: url('https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-content p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 下半部分时间记录区域 */
+        .time-section {
+            padding: 60px 0;
+            background-color: #fff;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .time-container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .time-title {
+            font-size: 2.2rem;
+            color: #e63946;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .time-title:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 3px;
+            background-color: #e63946;
+            bottom: -8px;
+            left: 20%;
+        }
+        
+        .time-description {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .time-unit {
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            border-radius: 15px;
+            padding: 25px 20px;
+            min-width: 150px;
+            box-shadow: 0 8px 20px rgba(255, 107, 129, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .time-unit:hover {
+            transform: translateY(-10px);
+        }
+        
+        .time-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .time-label {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+        
+        .start-date {
+            font-size: 1.3rem;
+            color: #e63946;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ffe5e9;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .love-quote {
+            font-style: italic;
+            color: #888;
+            margin-top: 40px;
+            font-size: 1.1rem;
+            border-left: 3px solid #ffafbd;
+            padding-left: 15px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+            
+            .time-title {
+                font-size: 1.8rem;
+            }
+            
+            .time-unit {
+                min-width: 120px;
+                padding: 20px 15px;
+            }
+            
+            .time-number {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .time-display {
+                gap: 10px;
+            }
+            
+            .time-unit {
+                min-width: 100px;
+                padding: 15px 10px;
+            }
+            
+            .time-number {
+                font-size: 2.2rem;
+            }
+            
+            .time-label {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 上半部分：背景图片区域 -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>我们的时光</h1>
+            <p>从相遇的那一天起，每一分每一秒都值得被铭记</p>
+        </div>
+    </section>
+    
+    <!-- 下半部分：时间记录区域 -->
+    <section class="time-section">
+        <div class="container time-container">
+            <h2 class="time-title">我们已经在一起</h2>
+            <p class="time-description">从约定的那一天开始，时间见证了我们的每一刻美好</p>
+            
+            <div class="time-display">
+                <div class="time-unit">
+                    <div class="time-number" id="days">0</div>
+                    <div class="time-label">天</div>
+                </div>
+                
+                <div class="time-unit">
+                    <div class="time-number" id="hours">0</div>
+                    <div class="time-label">小时</div>
+                </div>
+                
+                <div class="time-unit">
+                    <div class="time-number" id="minutes">0</div>
+                    <div class="time-label">分钟</div>
+                </div>
+                
+                <div class="time-unit">
+                    <div class="time-number" id="seconds">0</div>
+                    <div class="time-label">秒</div>
+                </div>
+            </div>
+            
+            <div class="start-date" id="startDateText">开始日期：2024年1月1日 00:00:00</div>
+            
+            <div class="love-quote">
+                "爱情不是彼此凝视，而是一起朝着同一个方向看。在一起的日子，是我们共同书写的最美篇章。"
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024-2026 我们的时光记录 | 每一天都因你而特别</p>
+        </div>
+    </footer>
+
+    <script>
+        // 设置开始日期和时间（2024年1月1日 00:00:00）
+        const startDate = new Date('2024-01-01T00:00:00');
+        
+        // 更新显示开始日期的文本
+        document.getElementById('startDateText').textContent = 
+            `开始日期：${startDate.getFullYear()}年${startDate.getMonth()+1}月${startDate.getDate()}日 00:00:00`;
+        
+        // 更新时间显示的函数
+        function updateTime() {
+            const now = new Date();
+            const timeDifference = now - startDate;
+            
+            // 计算天、时、分、秒
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            
+            // 更新页面显示
+            document.getElementById('days').textContent = days.toString().padStart(3, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // 页面加载后立即更新时间
+        updateTime();
+        
+        // 每秒更新一次时间
+        setInterval(updateTime, 1000);
+        
+        // 背景图片数组（可以替换为您喜欢的图片URL）
+        const backgroundImages = [
+            'https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1519638831568-d9897f54ed69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+            'https://images.unsplash.com/photo-1529254479751-fbacb4c7a587?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+        ];
+        
+        // 可选：每30秒切换一次背景图片
+        let currentBgIndex = 0;
+        const heroSection = document.querySelector('.hero-section');
+        
+        function changeBackground() {
+            currentBgIndex = (currentBgIndex + 1) % backgroundImages.length;
+            heroSection.style.backgroundImage = `url('${backgroundImages[currentBgIndex]}')`;
+        }
+        
+        // 取消自动切换背景图片的注释以启用此功能
+        // setInterval(changeBackground, 30000);
+        
+        // 添加一些动态效果：当鼠标悬停在时间单元上时，数字轻微跳动
+        const timeNumbers = document.querySelectorAll('.time-number');
+        timeNumbers.forEach(number => {
+            number.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.transition = 'transform 0.2s';
+            });
+            
+            number.addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
